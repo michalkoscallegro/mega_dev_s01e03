@@ -4,7 +4,7 @@ title: '#4471 follow-up: two causes, not one known issue'
 owner: michalkoscallegro
 status: closed
 reviewed: '2026-11-12'
-signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
+signature: 'v1.eyJzdWIiOiIxNzcyIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQ1MTgwNzUsImV4cCI6MTc5NDYwNDQ3NX0.vspxGHTzstiMuFNIa1vumDcyIZbRMuqu2HQKcdX5mFg'
 ---
 
 <script>

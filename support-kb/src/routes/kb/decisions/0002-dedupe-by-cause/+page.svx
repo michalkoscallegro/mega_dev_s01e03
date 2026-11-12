@@ -4,7 +4,7 @@ title: '0002 · Duplicate reports share a verified cause'
 owner: michalkoscallegro
 status: accepted
 reviewed: '2026-11-12'
-signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
+signature: 'v1.eyJzdWIiOiIxNzcyIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQ1MTgwNzUsImV4cCI6MTc5NDYwNDQ3NX0.vspxGHTzstiMuFNIa1vumDcyIZbRMuqu2HQKcdX5mFg'
 ---
 
 <script>
