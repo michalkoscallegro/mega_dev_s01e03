@@ -27,12 +27,13 @@
   The timeline below separates receipt from merge time.
 </p>
 
-<h3>Contrary evidence remains open</h3>
+<h3>Contrary evidence is retained</h3>
 <p>
   The desk noted <strong>{unresolved.length} reports</strong> describing a one-day move or timing
   discrepancy. Tenant/channel classification files them under parser, but that is not proof
-  that a month/day fix explains their text. Preserve these reports, reproduce their original
-  input and timezone context, and reclassify only if evidence establishes another cause.
+  that a month/day fix explains their text. The engineering closure does not independently
+  explain each account. Preserve the original input and timezone context; if the symptom
+  reproduces after the fix, investigate and reclassify only on evidence.
   They remain counted once, not as a speculative third incident.
 </p>
 <table>

@@ -55,3 +55,13 @@ test('current desk instructions supersede subject-only merging and expose live c
   assert.ok(index.includes('/kb/incidents/4471-follow-up'));
   assert.ok(index.includes('/kb/decisions/0002-dedupe-by-cause'));
 });
+
+test('rendered follow-up distinguishes fixed from retired without changing historical counts', () => {
+  const page = text(followUp);
+  assert.ok(page.includes('#4471 closed on 2026-10-05'));
+  assert.ok(page.includes('Parser: fixed.'));
+  assert.ok(page.includes('fix(dates): parse dd/mm for eu locales'));
+  assert.ok(page.includes('booking-v3 form was retired'));
+  assert.ok(page.includes('not planned'));
+  assert.ok(page.includes('only one defect was fixed'));
+});

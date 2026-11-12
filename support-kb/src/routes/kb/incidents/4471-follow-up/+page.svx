@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 follow-up: two causes, not one known issue'
 owner: michalkoscallegro
-status: investigated
+status: closed
 reviewed: '2026-11-12'
 signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
 ---
@@ -17,8 +17,24 @@ signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
 
 The [original #4471 page](/kb/incidents/4471) says that all reports are one known parser
 bug with one fix queued. Its rendered cause table contradicts that claim. The export
-establishes two independent failure paths; neither is fixed by writing this page or opening
-an issue. This review uses the export dated 2026-10-04, not a live feed.
+establishes two independent failure paths. This review uses the export dated 2026-10-04,
+plus the later engineering update on the course page; the export itself is not a live feed.
+
+## Engineering update: different closure outcomes
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows) reports that
+**#4471 closed on 2026-10-05**:
+
+- **Parser: fixed.** Engineering reports `fix(dates): parse dd/mm for eu locales`.
+  The [parser issue](https://github.com/michalkoscallegro/mega_dev_s01e03/issues/1) is closed
+  as **completed**.
+- **Hint: won't fix.** The **booking-v3 form was retired**, so the
+  [hint issue](https://github.com/michalkoscallegro/mega_dev_s01e03/issues/2) is closed as
+  **not planned**, not as a shipped hint fix.
+
+Both issues are closed, but only one defect was fixed. These outcomes come from the course's
+engineering update, not a product patch implemented in this KB repository. The historical
+report counts below remain unchanged.
 
 ## What the desk should track
 
@@ -44,8 +60,9 @@ which displays MM/DD/YYYY while reading input day first. R-41230 describes 6 Jan
 1 June; intake incorrectly tagged it parser. Following that hint with 01/06/2026 reproduces
 the mismatch.
 
-Generate the hint from the same tenant convention used to read the input. App and email
-reports from these tenants are not automatically hint reports: channel matters.
+The original corrective option was to generate the hint from the same tenant convention
+used to read the input. Engineering instead retired booking-v3 and chose won't fix.
+App and email reports from these tenants are not automatically hint reports: channel matters.
 
 ## Counting and evidence
 
