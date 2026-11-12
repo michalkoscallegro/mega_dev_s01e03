@@ -1,0 +1,54 @@
+---
+layout: runbook
+title: '0002 · Duplicate reports share a verified cause'
+owner: michalkoscallegro
+status: accepted
+reviewed: '2026-11-12'
+signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Context
+
+The desk serves multiple products. Normalized subjects identify similar wording, not a
+shared failure. [The #4471 follow-up](/kb/incidents/4471-follow-up) shows that the old rule
+merged two defects into one known ticket and hid the second fix.
+
+## Decision
+
+This decision supersedes [decision 0001](/kb/decisions/0001-dedupe-by-subject); that accepted
+record remains unchanged.
+
+Read the report and identify the affected product, tenant's authoritative configuration,
+entry point, reproduction, and failure mechanism. Merge only when the evidence supports
+the same cause within the relevant product. Record the evidence and retain each original
+report ID. Subjects and browser-derived intake tags are search hints, not merge keys.
+
+For sched-prod date reports in this export, use the existing `causeOf` and `sameCause`
+functions with `tenantOf`: day-first booking-v3 form reports are hint, while other
+day-first entry points are parser. These rules describe this incident, not every product
+or every future date defect.
+
+Missing tenant information, unsupported failure paths, and contradictory accounts need
+investigation. Keep them separate until there is evidence; never infer equality from two
+unknown causes. A new verified cause gets its own issue.
+
+## Running examples
+
+<DedupeExplorer />
+
+The examples cover identical subjects with different causes and different subjects with
+the same cause. Unknown tenants do not match even when their subjects are identical.
+The [current triage page](/kb/triage/dedupe) is the desk's entry point for this rule.
+
+## Consequences
+
+Triage requires reading and checking configuration. It avoids hiding a second defect
+behind a known ticket. Count reports once by ID, preserve contrary evidence, and separate
+receipt time from merge time when reviewing an incident.
+
+<RenderStamp {signature} />

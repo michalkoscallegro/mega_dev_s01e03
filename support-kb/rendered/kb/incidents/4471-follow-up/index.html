@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../../../_app/immutable/entry/start.C7cUt1WM.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/-v_Lc1Yp.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/Rr4ttzmC.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/D1CBmWJ_.js" rel="modulepreload">
+		<link href="../../../_app/immutable/entry/app.H0O0bhE_.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/BjsDKl40.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/CeQ0Fui8.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/BvfZsH8o.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/Bj2eesJi.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/0.Dwx1xNEN.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/5qoTi-ut.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/6.HeRI7TH0.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/CZ_6nrR9.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/lxLLZh2g.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/B-pxmAMd.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/E-i5aitW.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/DcCN1BeL.js" rel="modulepreload">
+		<!--e2jw2j--><!----><title>#4471 follow-up: two causes, not one known issue · support kb</title>
+		<link href="../../../_app/immutable/assets/runbook.BhhgOc_n.css" rel="stylesheet">
+		<link href="../../../_app/immutable/assets/QueueTimeline.hI2H_0Om.css" rel="stylesheet">
+		<link href="../../../_app/immutable/assets/RenderStamp.CMZ6TBbc.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><!--[--><div class="kb svelte-e2jw2j"><header><a class="crumb svelte-e2jw2j" href="/kb">support desk · kb</a> <h1 class="svelte-e2jw2j">#4471 follow-up: two causes, not one known issue</h1> <p class="meta svelte-e2jw2j"><span>owner <b>michalkoscallegro</b></span> <span class="status investigated svelte-e2jw2j">investigated</span> <span class="svelte-e2jw2j">reviewed 2026-11-12 · 0 days ago</span></p></header> <!--[-1--><!--]--> <main><p>The <a href="/kb/incidents/4471">original #4471 page</a> says that all reports are one known parser
+bug with one fix queued. Its rendered cause table contradicts that claim. The export
+establishes two independent failure paths; neither is fixed by writing this page or opening
+an issue. This review uses the export dated 2026-10-04, not a live feed.</p> <h2>What the desk should track</h2> <p class="sum svelte-12oyimm"><strong>412</strong> reports merged into #4471 · <strong>2</strong> causes</p> <table><thead><tr><th>cause</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th></th></tr></thead><tbody><!--[--><tr class="svelte-12oyimm"><td class="svelte-12oyimm"><code>parser</code></td><td class="svelte-12oyimm">379</td><td class="tags svelte-12oyimm">parser ×356 · hint ×23</td><td class="svelte-12oyimm">11</td><td class="svelte-12oyimm">2026-04-01 → 2026-10-04</td><td class="svelte-12oyimm"><!--[0--><a href="https://github.com/michalkoscallegro/mega_dev_s01e03/issues/1">Track parser separately</a><!--]--></td></tr><tr class="svelte-12oyimm wrong"><td class="svelte-12oyimm"><code>hint</code></td><td class="svelte-12oyimm">33</td><td class="tags svelte-12oyimm">hint ×18 · parser ×15</td><td class="svelte-12oyimm">3</td><td class="svelte-12oyimm">2026-04-17 → 2026-09-22</td><td class="svelte-12oyimm"><!--[0--><a href="https://github.com/michalkoscallegro/mega_dev_s01e03/issues/2">Track hint separately</a><!--]--></td></tr><!--]--></tbody></table> <!--[--><!--[0--><p class="note svelte-12oyimm">5 reports read as a one-day move; filed under <code>parser</code> by tenant.</p><!--]--><!--[-1--><!--]--><!--]--><!----> <h3>Shared parser: month first instead of the tenant’s date convention</h3> <p>The <a href="https://github.com/michalkoscallegro/mega_dev_s01e03/issues/1" rel="nofollow">parser issue</a> covers day-first
+tenants using app or email, and booking-v2 forms. For example, R-41200 from harbour.dental
+describes 7 April becoming 4 July. The tenant is en-GB even if a reporter’s browser is set
+otherwise. R-41205 from morrow.tax is an app report with tenant fr-FR, despite browser en-US
+and intake tag hint. It belongs to parser.</p> <p>Interpret the original input using the tenant convention, and verify the resulting date.
+Preserve month-first behavior. Do not mark the independent form-hint issue fixed when this
+parser is corrected.</p> <h3>booking-v3: the displayed hint disagrees with form parsing</h3> <p>The <a href="https://github.com/michalkoscallegro/mega_dev_s01e03/issues/2" rel="nofollow">hint issue</a> covers form reports
+from alder.physio (de-DE), copper.studio (es-ES), and pale.harbour (pt-PT). They run booking-v3,
+which displays MM/DD/YYYY while reading input day first. R-41230 describes 6 January becoming
+1 June; intake incorrectly tagged it parser. Following that hint with 01/06/2026 reproduces
+the mismatch.</p> <p>Generate the hint from the same tenant convention used to read the input. App and email
+reports from these tenants are not automatically hint reports: channel matters.</p> <h2>Counting and evidence</h2> <p>The export contains <strong>427 rows</strong>, but only <strong>412 distinct reports</strong> merged into #4471: <strong>15 repeated IDs</strong> are export overlap, not extra reports.
+  Intake tags disagree with tenant/channel classification for <strong>38 reports</strong>.</p> <p>Reports started on <strong>2026-04-01</strong>; merging started on <strong>2026-07-02</strong>, with <strong>183 reports</strong> received before that day.
+  The July merge spike is the desk clearing a backlog, not evidence that the defect started in July.
+  The timeline below separates receipt from merge time.</p> <h3>Contrary evidence remains open</h3> <p>The desk noted <strong>5 reports</strong> describing a one-day move or timing
+  discrepancy. Tenant/channel classification files them under parser, but that is not proof
+  that a month/day fix explains their text. Preserve these reports, reproduce their original
+  input and timezone context, and reclassify only if evidence establishes another cause.
+  They remain counted once, not as a speculative third incident.</p> <table><thead><tr><th>Report</th><th>Tenant / channel</th><th>Original account</th></tr></thead><tbody><!--[--><tr><td><code>R-41202</code></td><td>kettle.books / email</td><td>Invite says Tuesday 12 May. Calendar says Monday 11 May. My client turned up on the Monday. We had coffee.</td></tr><tr><td><code>R-41209</code></td><td>alder.physio / app</td><td>Every booking in June is one day off. Only June. Why only June.</td></tr><tr><td><code>R-41236</code></td><td>nine.lanterns / app</td><td>The invite arrived before I made the booking. I would like to know how.</td></tr><tr><td><code>R-41344</code></td><td>pale.harbour / email</td><td>Client in Lisbon got Tuesday. Client in Toronto got Monday. Same meeting. We held it twice.</td></tr><tr><td><code>R-41620</code></td><td>lantern.row / email</td><td>Tuesday 6 October showed as Monday. I moved it myself. I have stopped reporting these but my colleague says it helps you.</td></tr><!--]--></tbody></table><!----> <p>Counts are computed from the export by the supplied code, not copied from intake labels. <code>uniqueById</code> removes overlapping export rows; <code>causeOf</code> uses channel plus the authoritative
+tenant locale and installed form. <code>dayFirst</code> asks Intl.DateTimeFormat for that locale’s
+date-part order. <code>locales.ts</code> resolves the tenant directory, not <code>meta.browserLocale</code>.
+Missing tenant configuration is unplaced, never a reason to guess or merge by subject.</p> <h2>When it happened</h2> <figure><svg viewBox="0 0 648 140" role="img" aria-label="reports received and merged into #4471, per week" class="svelte-18a6qal"><!--[--><rect class="in svelte-18a6qal" x="2" y="106.29629629629629" width="9" height="3.7037037037037033"></rect><rect class="merged svelte-18a6qal" x="12" y="110" width="9" height="0"></rect><!--[0--><text x="12" y="128" class="svelte-18a6qal">03-30</text><!--]--><rect class="in svelte-18a6qal" x="26" y="104.17989417989418" width="9" height="5.82010582010582"></rect><rect class="merged svelte-18a6qal" x="36" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="50" y="102.5925925925926" width="9" height="7.4074074074074066"></rect><rect class="merged svelte-18a6qal" x="60" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="74" y="99.94708994708995" width="9" height="10.052910052910052"></rect><rect class="merged svelte-18a6qal" x="84" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="98" y="101.53439153439153" width="9" height="8.465608465608465"></rect><rect class="merged svelte-18a6qal" x="108" y="110" width="9" height="0"></rect><!--[0--><text x="108" y="128" class="svelte-18a6qal">04-27</text><!--]--><rect class="in svelte-18a6qal" x="122" y="103.65079365079364" width="9" height="6.349206349206349"></rect><rect class="merged svelte-18a6qal" x="132" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="146" y="105.76719576719577" width="9" height="4.232804232804233"></rect><rect class="merged svelte-18a6qal" x="156" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="170" y="103.65079365079364" width="9" height="6.349206349206349"></rect><rect class="merged svelte-18a6qal" x="180" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="194" y="102.5925925925926" width="9" height="7.4074074074074066"></rect><rect class="merged svelte-18a6qal" x="204" y="110" width="9" height="0"></rect><!--[0--><text x="204" y="128" class="svelte-18a6qal">05-25</text><!--]--><rect class="in svelte-18a6qal" x="218" y="101.00529100529101" width="9" height="8.994708994708994"></rect><rect class="merged svelte-18a6qal" x="228" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="242" y="101.53439153439153" width="9" height="8.465608465608465"></rect><rect class="merged svelte-18a6qal" x="252" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="266" y="101.00529100529101" width="9" height="8.994708994708994"></rect><rect class="merged svelte-18a6qal" x="276" y="110" width="9" height="0"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="290" y="104.17989417989418" width="9" height="5.82010582010582"></rect><rect class="merged svelte-18a6qal" x="300" y="110" width="9" height="0"></rect><!--[0--><text x="300" y="128" class="svelte-18a6qal">06-22</text><!--]--><rect class="in svelte-18a6qal" x="314" y="102.06349206349206" width="9" height="7.936507936507936"></rect><rect class="merged svelte-18a6qal" x="324" y="10" width="9" height="100"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="338" y="99.94708994708995" width="9" height="10.052910052910052"></rect><rect class="merged svelte-18a6qal" x="348" y="100.47619047619048" width="9" height="9.523809523809524"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="362" y="101.00529100529101" width="9" height="8.994708994708994"></rect><rect class="merged svelte-18a6qal" x="372" y="100.47619047619048" width="9" height="9.523809523809524"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="386" y="102.06349206349206" width="9" height="7.936507936507936"></rect><rect class="merged svelte-18a6qal" x="396" y="102.06349206349206" width="9" height="7.936507936507936"></rect><!--[0--><text x="396" y="128" class="svelte-18a6qal">07-20</text><!--]--><rect class="in svelte-18a6qal" x="410" y="99.94708994708995" width="9" height="10.052910052910052"></rect><rect class="merged svelte-18a6qal" x="420" y="99.94708994708995" width="9" height="10.052910052910052"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="434" y="105.76719576719577" width="9" height="4.232804232804233"></rect><rect class="merged svelte-18a6qal" x="444" y="105.76719576719577" width="9" height="4.232804232804233"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="458" y="102.06349206349206" width="9" height="7.936507936507936"></rect><rect class="merged svelte-18a6qal" x="468" y="102.06349206349206" width="9" height="7.936507936507936"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="482" y="99.41798941798942" width="9" height="10.582010582010582"></rect><rect class="merged svelte-18a6qal" x="492" y="99.41798941798942" width="9" height="10.582010582010582"></rect><!--[0--><text x="492" y="128" class="svelte-18a6qal">08-17</text><!--]--><rect class="in svelte-18a6qal" x="506" y="102.5925925925926" width="9" height="7.4074074074074066"></rect><rect class="merged svelte-18a6qal" x="516" y="102.5925925925926" width="9" height="7.4074074074074066"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="530" y="98.88888888888889" width="9" height="11.11111111111111"></rect><rect class="merged svelte-18a6qal" x="540" y="98.88888888888889" width="9" height="11.11111111111111"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="554" y="99.41798941798942" width="9" height="10.582010582010582"></rect><rect class="merged svelte-18a6qal" x="564" y="99.41798941798942" width="9" height="10.582010582010582"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="578" y="102.06349206349206" width="9" height="7.936507936507936"></rect><rect class="merged svelte-18a6qal" x="588" y="102.06349206349206" width="9" height="7.936507936507936"></rect><!--[0--><text x="588" y="128" class="svelte-18a6qal">09-14</text><!--]--><rect class="in svelte-18a6qal" x="602" y="96.77248677248677" width="9" height="13.227513227513226"></rect><rect class="merged svelte-18a6qal" x="612" y="97.83068783068784" width="9" height="12.16931216931217"></rect><!--[-1--><!--]--><rect class="in svelte-18a6qal" x="626" y="102.06349206349206" width="9" height="7.936507936507936"></rect><rect class="merged svelte-18a6qal" x="636" y="101.00529100529101" width="9" height="8.994708994708994"></rect><!--[-1--><!--]--><!--]--></svg> <figcaption class="svelte-18a6qal"><span class="key in svelte-18a6qal"></span> received · <span class="key merged svelte-18a6qal"></span> merged into #4471 · per week</figcaption></figure><!----> <p>Reports arrived before the desk merged them, and continued after it did. A large known
+ticket and a queued fix are not evidence of resolution. Compare receivedAt with mergedAt
+before interpreting a spike.</p> <h2>Change the running desk rule, not just this incident</h2> <p><a href="/kb/decisions/0002-dedupe-by-cause">Decision 0002</a> replaces subject-only merging. <a href="/kb/triage/dedupe">Current triage</a> now asks for product, tenant configuration, entry point,
+and evidence of a shared cause. Equal subjects can hide different defects; different
+subjects can describe the same defect. Unknowns stay separate for investigation.</p> <p>Decision 0001 remains unchanged as the historical accepted decision. This incident is an
+example of why it is superseded, not permission to apply a scheduling-specific classifier
+blindly to every product the support desk handles.</p> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-EFST-HMN6</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_mllooh = {
+						base: new URL("../../..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../../_app/immutable/entry/start.C7cUt1WM.js"),
+						import("../../../_app/immutable/entry/app.H0O0bhE_.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 6],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

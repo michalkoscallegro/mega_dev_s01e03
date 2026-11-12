@@ -1,0 +1,79 @@
+---
+layout: runbook
+title: '#4471 follow-up: two causes, not one known issue'
+owner: michalkoscallegro
+status: investigated
+reviewed: '2026-11-12'
+signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import IncidentSummary from '#lib/kb/IncidentSummary.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import issueLinks from '#lib/data/follow-up-4471.json';
+</script>
+
+The [original #4471 page](/kb/incidents/4471) says that all reports are one known parser
+bug with one fix queued. Its rendered cause table contradicts that claim. The export
+establishes two independent failure paths; neither is fixed by writing this page or opening
+an issue. This review uses the export dated 2026-10-04, not a live feed.
+
+## What the desk should track
+
+<CauseTable ticket={4471} {issueLinks} />
+
+### Shared parser: month first instead of the tenant's date convention
+
+The [parser issue](https://github.com/michalkoscallegro/mega_dev_s01e03/issues/1) covers day-first
+tenants using app or email, and booking-v2 forms. For example, R-41200 from harbour.dental
+describes 7 April becoming 4 July. The tenant is en-GB even if a reporter's browser is set
+otherwise. R-41205 from morrow.tax is an app report with tenant fr-FR, despite browser en-US
+and intake tag hint. It belongs to parser.
+
+Interpret the original input using the tenant convention, and verify the resulting date.
+Preserve month-first behavior. Do not mark the independent form-hint issue fixed when this
+parser is corrected.
+
+### booking-v3: the displayed hint disagrees with form parsing
+
+The [hint issue](https://github.com/michalkoscallegro/mega_dev_s01e03/issues/2) covers form reports
+from alder.physio (de-DE), copper.studio (es-ES), and pale.harbour (pt-PT). They run booking-v3,
+which displays MM/DD/YYYY while reading input day first. R-41230 describes 6 January becoming
+1 June; intake incorrectly tagged it parser. Following that hint with 01/06/2026 reproduces
+the mismatch.
+
+Generate the hint from the same tenant convention used to read the input. App and email
+reports from these tenants are not automatically hint reports: channel matters.
+
+## Counting and evidence
+
+<IncidentSummary />
+
+Counts are computed from the export by the supplied code, not copied from intake labels.
+`uniqueById` removes overlapping export rows; `causeOf` uses channel plus the authoritative
+tenant locale and installed form. `dayFirst` asks Intl.DateTimeFormat for that locale's
+date-part order. `locales.ts` resolves the tenant directory, not `meta.browserLocale`.
+Missing tenant configuration is unplaced, never a reason to guess or merge by subject.
+
+## When it happened
+
+<QueueTimeline ticket={4471} />
+
+Reports arrived before the desk merged them, and continued after it did. A large known
+ticket and a queued fix are not evidence of resolution. Compare receivedAt with mergedAt
+before interpreting a spike.
+
+## Change the running desk rule, not just this incident
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces subject-only merging.
+[Current triage](/kb/triage/dedupe) now asks for product, tenant configuration, entry point,
+and evidence of a shared cause. Equal subjects can hide different defects; different
+subjects can describe the same defect. Unknowns stay separate for investigation.
+
+Decision 0001 remains unchanged as the historical accepted decision. This incident is an
+example of why it is superseded, not permission to apply a scheduling-specific classifier
+blindly to every product the support desk handles.
+
+<RenderStamp {signature} />

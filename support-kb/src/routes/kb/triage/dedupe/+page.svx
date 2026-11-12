@@ -1,0 +1,54 @@
+---
+layout: runbook
+title: 'Triage: duplicate reports'
+owner: support desk
+status: active
+reviewed: '2026-11-12'
+signature: 'michalkoscallegro / GitHub Copilot (gpt-6.1-sol)'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+A busy morning brings reports with similar wording but potentially different causes. We keep
+one ticket per verified cause, retain the original reports, and count distinct report IDs.
+
+## The rule
+
+A report is a duplicate when evidence shows the **same cause**, following
+[decision 0002](/kb/decisions/0002-dedupe-by-cause). It supersedes the old subject-only rule
+in decision 0001, which remains unchanged as history.
+
+1. Read the report and identify the affected product and tenant.
+2. Look up authoritative tenant configuration and the entry point; do not substitute the
+   reporter's browser locale or intake tag.
+3. Check reproduction and mechanism against the candidate issue. Merge only when the cause
+   matches, even if the subjects differ.
+4. Different verified cause: open a separate issue. Missing evidence: keep it separate for
+   investigation, even if the subjects match. Retain the report ID and supporting evidence.
+
+<Callout>
+Subject matching can find candidates; it cannot establish a duplicate. The desk handles
+multiple products, so use the diagnostic path for the affected product.
+</Callout>
+
+For sched-prod dates in the current export, use `causeOf` / `sameCause` with `tenantOf`.
+Day-first booking-v3 form reports have the hint cause; other day-first entry points have the
+parser cause. Missing tenant or unsupported input does not establish a match.
+The [#4471 follow-up](/kb/incidents/4471-follow-up) links the separate parser and hint issues
+and preserves contradictory reports that still need reproduction.
+
+## Try it
+
+<DedupeExplorer />
+
+## When you are unsure
+
+Do not merge yet. Request the missing configuration and original input, preserve the
+report, and investigate. A known ticket or queued fix does not establish that a new report
+is the same failure or that its problem is resolved.
+
+<RenderStamp {signature} />
